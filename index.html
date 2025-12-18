@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary!!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300;500;700&display=swap');
+
+        :root {
+            --primary-pink: #ff4d6d;
+            --soft-pink: #ffb3c1;
+            --deep-rose: #c9184a;
+            --gold: #d4af37;
+            --glass: rgba(255, 255, 255, 0.75);
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fe9a9e 100%);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            z-index: -2;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .bokeh {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .cursive { font-family: 'Dancing Script', cursive; }
+        .serif { font-family: 'Playfair Display', serif; }
+
+        .premium-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 3rem;
+            box-shadow: 0 40px 100px -20px rgba(201, 24, 74, 0.3),
+                        inset 0 0 30px rgba(255, 255, 255, 0.4);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .photo-container {
+            position: relative;
+            padding: 12px;
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transform: perspective(1000px) rotateY(-3deg) rotateX(3deg);
+            transition: all 0.6s ease;
+            margin: 0 auto;
+        }
+
+        .photo-container:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1.03);
+            box-shadow: 0 20px 45px rgba(255, 77, 109, 0.3);
+        }
+
+        .cursor-dot {
+            width: 8px; height: 8px; background: var(--primary-pink);
+            position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 2px solid var(--primary-pink);
+            position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s ease-out;
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, #ff4d6d 0%, #c9184a 100%);
+            color: white;
+            padding: 14px 36px;
+            border-radius: 100px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 30px rgba(201, 24, 74, 0.4);
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.85rem;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(201, 24, 74, 0.6);
+        }
+
+        .counter-box {
+            background: rgba(255, 77, 109, 0.08);
+            border: 1px solid rgba(255, 77, 109, 0.15);
+            border-radius: 1.5rem;
+            padding: 15px;
+        }
+
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        #musicBtn {
+            position: fixed; top: 30px; right: 30px; z-index: 1000;
+            background: white; border: 1px solid var(--soft-pink);
+            width: 45px; height: 45px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .star-particle {
+            position: fixed; pointer-events: none; z-index: 9997;
+            animation: starFall 1.5s forwards;
+        }
+
+        @keyframes starFall {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0) translateY(50px); }
+        }
+
+        .names-title {
+            color: var(--deep-rose);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-gradient"></div>
+    <div class="bokeh" id="bokehContainer"></div>
+    <div class="cursor-dot" id="dot"></div>
+    <div class="cursor-outline" id="outline"></div>
+
+    <button id="musicBtn" onclick="toggleMusic()">
+        <i data-lucide="music-2" class="w-5 h-5 text-pink-500"></i>
+    </button>
+
+    <audio id="bgMusic" loop>
+        <source src="Jaz - Bersamamu (Official Lyric Video) [D-VytLhH-KE] (1).mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="premium-card p-10 md:p-14 max-w-xl w-full text-center relative z-10 overflow-hidden">
+        
+        <!-- Header -->
+        <div class="mb-6">
+            <span class="text-deep-rose font-bold tracking-[0.4em] text-[9px] uppercase opacity-60">History</span>
+            <h1 class="text-4xl md:text-5xl font-bold text-pink-600 cursive mt-3">Anniversary ke-22</h1>
+            <div class="flex items-center justify-center gap-3 mt-4">
+                <div class="h-[1px] w-10 bg-pink-200"></div>
+                <i data-lucide="sparkles" class="w-3 h-3 text-pink-300"></i>
+                <div class="h-[1px] w-10 bg-pink-200"></div>
+            </div>
+        </div>
+
+        <!-- Timer Section -->
+        <div class="counter-box mb-8">
+            <p class="text-[10px] text-pink-500 font-bold uppercase tracking-widest mb-2">Perjalanan Cinta Kita</p>
+            <div class="flex justify-around items-center">
+                <div>
+                    <span id="days" class="text-xl md:text-2xl font-bold text-pink-600 serif">0</span>
+                    <p class="text-[8px] uppercase tracking-tighter text-gray-400">Hari</p>
+                </div>
+                <div class="text-pink-100 opacity-50">|</div>
+                <div>
+                    <span id="hours" class="text-xl md:text-2xl font-bold text-pink-600 serif">0</span>
+                    <p class="text-[8px] uppercase tracking-tighter text-gray-400">Jam</p>
+                </div>
+                <div class="text-pink-100 opacity-50">|</div>
+                <div>
+                    <span id="mins" class="text-xl md:text-2xl font-bold text-pink-600 serif">0</span>
+                    <p class="text-[8px] uppercase tracking-tighter text-gray-400">Menit</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Names Section -->
+        <div class="mb-8 pt-4 border-t border-pink-100 relative">
+             <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white/50 backdrop-blur-sm px-4 rounded-full border border-pink-50">
+                <i data-lucide="infinity" class="w-4 h-4 text-pink-400"></i>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <span class="names-title">Muhammad Azwir Badawi</span>
+                <i data-lucide="heart" class="w-5 h-5 text-pink-500 fill-pink-500 animate-pulse"></i>
+                <span class="names-title">Sri Wulandari BR Sinuraya</span>
+            </div>
+        </div>
+
+        <!-- Photo Section (Sekarang di bawah nama) -->
+        <div class="mb-10 photo-container max-w-[260px]">
+            <img src="IMG_20250806_185006.jpg" alt="Momen Indah Kita" class="rounded-lg w-full" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'">
+            <div class="mt-4 pb-1">
+                <p class="cursive text-xl text-pink-500">Janji Setia</p>
+                <p class="text-[8px] font-bold text-black-300 tracking-[0.2em] mt-1 uppercase">20-Februari 2024 — 20-Desember 2025</p>
+            </div>
+        </div>
+
+        <!-- Button Section -->
+        <div class="mb-4">
+            <button class="btn-premium flex items-center gap-3 mx-auto" onclick="openLove()">
+                <i data-lucide="mail-heart" class="w-4 h-4"></i>
+                Buka Pesan
+            </button>
+        </div>
+
+        <p class="mt-8 text-black-300 font-medium italic text-[10px] serif">"...I Love You So Much..."</p>
+    </div>
+
+    <!-- Modal Pesan Custom -->
+    <div id="loveModal" class="fixed inset-0 z-[1001] flex items-center justify-center p-6 bg-pink-900/60 backdrop-blur-md hidden">
+        <div class="bg-white rounded-[3rem] p-10 md:p-14 max-w-lg w-full shadow-2xl relative text-center">
+            <button onclick="closeLove()" class="absolute top-8 right-10 text-gray-300 hover:text-pink-500 transition-all">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            
+            <div class="floating mb-8">
+                <div class="w-20 h-20 bg-pink-50 rounded-full flex items-center justify-center mx-auto border-2 border-pink-100">
+                    <i data-lucide="gift" class="w-8 h-8 text-pink-500"></i>
+                </div>
+            </div>
+            
+            <h2 class="text-3xl md:text-4xl font-bold text-pink-600 cursive mb-6">Dear My Love,</h2>
+            <p class="text-gray-500 leading-relaxed mb-8 text-base md:text-lg serif italic">
+                "22 bulan bukan soal hitungan waktu, tetapi tentang setiap langkah kecil yang kita jalani bersama ❤️ 
+                Dalam sederhana dan rumit, kita terus memilih satu sama lain, belajar menjaga, dan bertumbuh 🤍
+                Kita mungkin belum sempurna, namun kebersamaan ini selalu terasa cukup 💕 Selama 22 bulan ini, 
+                kamu bukan hanya pasangan, tetapi juga tempat pulang yang membuat semuanya terasa lebih tenang 🏡💖"
+            </p>
+            
+            <div class="inline-block py-2 px-8 border-2 border-pink-100 rounded-full text-pink-500 font-bold tracking-widest text-[9px] uppercase">
+                Happy 22nd Anniversary! ❤️
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // 1. Custom Cursor Logic
+        const dot = document.getElementById('dot');
+        const outline = document.getElementById('outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            
+            outline.animate({
+                left: e.clientX + 'px',
+                top: e.clientY + 'px'
+            }, { duration: 500, fill: "forwards" });
+
+            if(Math.random() > 0.92) {
+                createTrail(e.clientX, e.clientY);
+            }
+        });
+
+        function createTrail(x, y) {
+            const star = document.createElement('div');
+            star.className = 'star-particle';
+            star.innerHTML = '✨';
+            star.style.left = x + 'px';
+            star.style.top = y + 'px';
+            star.style.fontSize = (Math.random() * 12 + 6) + 'px';
+            document.body.appendChild(star);
+            setTimeout(() => star.remove(), 1500);
+        }
+
+        // 2. Counter Logic
+        const startDate = new Date("February 20, 2024 00:00:00").getTime();
+        
+        function updateCounter() {
+            const now = new Date().getTime();
+            const diff = now - startDate;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('days').innerText = d;
+            document.getElementById('hours').innerText = h;
+            document.getElementById('mins').innerText = m;
+        }
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        // 3. Bokeh Background
+        const bokehContainer = document.getElementById('bokehContainer');
+        for (let i = 0; i < 18; i++) {
+            const circle = document.createElement('div');
+            circle.style.position = 'absolute';
+            circle.style.width = Math.random() * 140 + 60 + 'px';
+            circle.style.height = circle.style.width;
+            circle.style.borderRadius = '50%';
+            circle.style.background = 'rgba(255, 255, 255, 0.2)';
+            circle.style.left = Math.random() * 100 + 'vw';
+            circle.style.top = Math.random() * 100 + 'vh';
+            circle.style.filter = 'blur(45px)';
+            circle.animate([
+                { transform: 'translate(0, 0)' },
+                { transform: `translate(${Math.random() * 120 - 60}px, ${Math.random() * 120 - 60}px)` }
+            ], { duration: 6000 + Math.random() * 4000, iterations: Infinity, direction: 'alternate' });
+            bokehContainer.appendChild(circle);
+        }
+
+        // 4. Interaction Logic
+        const audio = document.getElementById('bgMusic');
+        let musicPlaying = false;
+
+        function openLove() {
+            const modal = document.getElementById('loveModal');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            if (!musicPlaying) playMusic();
+            createHeartRain();
+        }
+
+        function closeLove() {
+            document.getElementById('loveModal').style.display = 'none';
+        }
+
+        function playMusic() {
+            audio.play().then(() => {
+                musicPlaying = true;
+                updateIcon();
+            }).catch(() => {});
+        }
+
+        function toggleMusic() {
+            if (musicPlaying) { audio.pause(); musicPlaying = false; }
+            else { audio.play(); musicPlaying = true; }
+            updateIcon();
+        }
+
+        function updateIcon() {
+            const icon = document.querySelector('#musicBtn i');
+            icon.setAttribute('data-lucide', musicPlaying ? 'volume-2' : 'volume-x');
+            lucide.createIcons();
+        }
+
+        function createHeartRain() {
+            const hearts = ['❤️', '💖', '✨', '🌸', '🌹'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const h = document.createElement('div');
+                    h.className = 'heart-fall fixed top-[-10%] pointer-events-none z-[2000]';
+                    h.style.animation = `fall ${Math.random() * 2 + 2}s linear forwards`;
+                    h.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                    h.style.left = Math.random() * 100 + 'vw';
+                    h.style.fontSize = Math.random() * 20 + 15 + 'px';
+                    document.body.appendChild(h);
+                    setTimeout(() => h.remove(), 4000);
+                }, i * 120);
+            }
+        }
+
+        window.onclick = (e) => {
+            const modal = document.getElementById('loveModal');
+            if (e.target == modal) closeLove();
+        }
+    </script>
+</body>
+</html>
